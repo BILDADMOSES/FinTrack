@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FinTrack | Finnet Technologies</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23132139'/%3E%3Cpath d='M12 29V11h17v4H16v5h10v4H16v5z' fill='white'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: light;
+      --navy: #132139;
+      --accent: #2946aa;
+      --paper: #fff;
+      --surface: #f3f5f8;
+      --line: #c0c8d5;
+      --muted: #4c5970;
+      --radius: .65rem;
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body { margin: 0; background: var(--surface); color: var(--navy); font: 1rem/1.5 system-ui, sans-serif; }
+    header { background: var(--navy); color: var(--paper); }
+    .wrap { max-width: 75rem; margin: auto; padding: 1rem; }
+    .row { display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; }
+    h1, h2, h3 { margin: 0; line-height: 1.2; overflow-wrap: anywhere; }
+    h1 { font-size: 1.5rem; }
+    h2 { font-size: 1.35rem; }
+    h3 { font-size: 1.1rem; }
+    p { margin: .5rem 0; }
+    .muted { color: var(--muted); }
+    .card { padding: 1rem; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); margin-bottom: 1rem; min-width: 0; }
+    #auth { max-width: 30rem; margin: 2rem auto; }
+    #status { min-height: 1.5em; overflow-wrap: anywhere; }
+    #status[data-error="true"] { font-weight: 700; }
+    label { display: grid; gap: .3rem; font-weight: 600; min-width: 0; }
+    input, select, button { font: inherit; border-radius: .4rem; min-height: 2.75rem; }
+    input, select { border: 1px solid var(--line); padding: .45rem .6rem; width: 100%; color: var(--navy); background: var(--paper); }
+    button { padding: .45rem .8rem; border: 1px solid var(--accent); background: var(--accent); color: var(--paper); cursor: pointer; font-weight: 650; }
+    button.secondary { background: var(--paper); color: var(--accent); }
+    button:disabled { opacity: .65; cursor: wait; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+    header :focus-visible { outline-color: var(--paper); }
+    form, .stack { display: grid; gap: .8rem; margin-top: .8rem; }
+    fieldset { margin: 0; border: 0; padding: 0; min-width: 0; }
+    .fields, .grid { display: grid; gap: .8rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); }
+    .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .8rem; }
+    ul { padding: 0; margin: .75rem 0 0; list-style: none; }
+    .portfolio { border-top: 1px solid var(--line); padding: .65rem 0; }
+    .portfolio button { text-align: left; overflow-wrap: anywhere; }
+    .scroll { overflow-x: auto; margin-top: .65rem; }
+    table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+    caption { text-align: left; padding-bottom: .4rem; }
+    th, td { padding: .55rem .6rem; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+    .number { text-align: right; }
+    .filters { margin-top: .75rem; }
+    figure { margin: 0; }
+    .bar-line { margin-top: .6rem; }
+    .track { height: .65rem; border-radius: .4rem; background: var(--surface); overflow: hidden; }
+    .bar { height: 100%; background: var(--accent); }
+    @media (min-width: 55rem) {
+      #workspace { display: grid; grid-template-columns: 1fr 2.5fr; gap: 1rem; align-items: start; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap row">
+      <div><h1>FinTrack</h1><span>by Finnet Technologies</span></div>
+      <button id="sign-out" type="button" class="secondary" hidden>Sign out</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <p id="status" role="status" aria-live="polite"></p>
+
+    <section id="auth" class="card" aria-labelledby="auth-title">
+      <h2 id="auth-title">Sign in</h2>
+      <form id="auth-form">
+        <label>Username
+          <input name="username" autocomplete="username" required minlength="3" maxlength="50"
+                 pattern="[a-zA-Z0-9_]+" title="Use letters, numbers or underscores.">
+        </label>
+        <label>Password
+          <input name="password" type="password" autocomplete="current-password"
+                 required minlength="8" maxlength="128">
+        </label>
+        <button id="auth-submit" type="submit">Sign in</button>
+      </form>
+      <div class="actions">
+        <button id="auth-toggle" type="button" class="secondary">Create an account</button>
+      </div>
+    </section>
+
+    <div id="workspace" hidden>
+      <section class="card" aria-labelledby="portfolios-title">
+        <div class="row">
+          <h2 id="portfolios-title">Your portfolios</h2>
+          <button id="new-portfolio" type="button">New portfolio</button>
+        </div>
+        <ul id="portfolio-list"></ul>
+        <p id="portfolio-empty" class="muted" hidden>Create a portfolio to start tracking trades.</p>
+        <form id="portfolio-form" hidden>
+          <h3 id="portfolio-form-title">New portfolio</h3>
+          <label>Portfolio name <input name="name" required maxlength="100"></label>
+          <label>Client name <input name="client_name" required maxlength="100"></label>
+          <label>Base currency
+            <select name="base_currency"><option>KES</option><option>USD</option></select>
+          </label>
+          <p id="currency-note" class="muted" hidden>Currency is fixed while this portfolio has trades.</p>
+          <div class="actions">
+            <button type="submit">Save portfolio</button>
+            <button id="cancel-portfolio" type="button" class="secondary">Cancel</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="details" hidden aria-labelledby="portfolio-title">
+        <div class="card">
+          <div class="row">
+            <h2 id="portfolio-title" tabindex="-1"></h2>
+            <div class="actions">
+              <button id="edit-portfolio" type="button" class="secondary">Edit</button>
+              <button id="delete-portfolio" type="button" class="secondary">Delete</button>
+            </div>
+          </div>
+          <p id="portfolio-client" class="muted"></p>
+        </div>
+
+        <div class="card">
+          <h3>Current holdings</h3>
+          <p class="muted">Estimated value uses the latest recorded trade price.</p>
+          <p id="holdings-empty" hidden>No current holdings.</p>
+          <div class="scroll" tabindex="0" role="region" aria-label="Holdings table" id="holdings-scroll">
+            <table>
+              <thead><tr>
+                <th scope="col">Instrument</th><th scope="col" class="number">Units</th>
+                <th scope="col" class="number">Average cost</th><th scope="col" class="number">Invested</th>
+                <th scope="col" class="number">Estimated value</th>
+              </tr></thead>
+              <tbody id="holdings-rows"></tbody>
+            </table>
+          </div>
+          <figure id="chart" class="stack" hidden>
+            <figcaption><strong>Estimated value by instrument</strong></figcaption>
+            <div id="chart-bars"></div>
+          </figure>
+        </div>
+
+        <div class="card">
+          <h3>Transaction history</h3>
+          <div class="fields filters">
+            <label>Filter by instrument <input id="trade-search" type="search" placeholder="e.g. SCOM"></label>
+            <label>Trade type
+              <select id="trade-filter"><option value="">All types</option><option>BUY</option><option>SELL</option></select>
+            </label>
+            <label>Sort trades
+              <select id="trade-sort">
+                <option value="newest">Newest first</option><option value="oldest">Oldest first</option>
+                <option value="instrument">Instrument A–Z</option>
+              </select>
+            </label>
+          </div>
+          <p id="trades-empty" hidden></p>
+          <div class="scroll" tabindex="0" role="region" aria-label="Transactions table" id="trades-scroll">
+            <table>
+              <thead><tr>
+                <th scope="col">Trade date</th><th scope="col">Instrument</th><th scope="col">Type</th>
+                <th scope="col" class="number">Units</th><th scope="col" class="number">Unit price</th>
+                <th scope="col">Action</th>
+              </tr></thead>
+              <tbody id="trade-rows"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Record a trade</h3>
+          <form id="trade-form">
+            <div class="fields">
+              <label>Instrument <input name="instrument" placeholder="e.g. SCOM" required maxlength="30"></label>
+              <label>Type <select name="type"><option>BUY</option><option>SELL</option></select></label>
+              <label>Quantity <input name="quantity" type="number" min="0.000001" step="0.000001" required></label>
+              <label>Unit price <input name="unit_price" type="number" min="0.000001" step="0.000001" required></label>
+              <label>Trade date <input name="trade_date" type="date" required></label>
+            </div>
+            <div><button type="submit">Record trade</button></div>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const byId = (id) => document.getElementById(id);
+    const authForm = byId("auth-form");
+    const portfolioForm = byId("portfolio-form");
+    const tradeForm = byId("trade-form");
+    const workspace = byId("workspace");
+
+    let token = "";
+    let registering = false;
+    let activePortfolio = null;
+    let editingId = null;
+    let trades = [];
+    let busy = false;
+
+    function showStatus(message, error = false) {
+      const status = byId("status");
+      status.textContent = message;
+      status.dataset.error = String(error);
+    }
+
+    function setAuthMode(createAccount) {
+      registering = createAccount;
+      const title = registering ? "Create an account" : "Sign in";
+      byId("auth-title").textContent = title;
+      byId("auth-submit").textContent = title;
+      byId("auth-toggle").textContent = registering ? "Back to sign in" : "Create an account";
+      authForm.elements.password.autocomplete = registering ? "new-password" : "current-password";
+    }
+
+    function endSession() {
+      token = "";
+      activePortfolio = null;
+      editingId = null;
+      trades = [];
+      workspace.hidden = true;
+      byId("details").hidden = true;
+      byId("sign-out").hidden = true;
+      byId("portfolio-list").replaceChildren();
+      for (const id of ["holdings-rows", "trade-rows", "chart-bars"]) byId(id).replaceChildren();
+      portfolioForm.reset();
+      portfolioForm.hidden = true;
+      tradeForm.reset();
+      authForm.reset();
+      setAuthMode(false);
+      byId("auth").hidden = false;
+      authForm.elements.username.focus();
+    }
+
+    async function api(path, { method = "GET", body } = {}) {
+      const headers = {};
+      if (token) headers.Authorization = `Bearer ${token}`;
+      if (body !== undefined) headers["Content-Type"] = "application/json";
+
+      let response;
+      try {
+        response = await fetch(`/api${path}`, {
+          method,
+          headers,
+          body: body === undefined ? undefined : JSON.stringify(body),
+        });
+      } catch {
+        throw new Error("Could not reach FinTrack. Check your connection and try again.");
+      }
+
+      if (response.status === 204) return;
+      const data = await response.json().catch(() => null);
+      if (response.ok && data !== null) return data;
+
+      if (response.status === 401 && token) {
+        endSession();
+        throw new Error("Your session ended. Sign in again.");
+      }
+      if (typeof data?.detail === "string") throw new Error(data.detail);
+      if (Array.isArray(data?.detail)) {
+        throw new Error("Check the values you entered and try again.");
+      }
+      throw new Error(`FinTrack could not complete the request (${response.status}). Try again.`);
+    }
+
+    async function run(message, action) {
+      if (busy) return;
+      busy = true;
+      const controls = [...document.querySelectorAll("button:not(:disabled)")];
+      controls.forEach((button) => { button.disabled = true; });
+      showStatus(message);
+      try {
+        const confirmation = await action();
+        showStatus(confirmation ?? "");
+      } catch (error) {
+        showStatus(error.message, true);
+      } finally {
+        controls.forEach((button) => { button.disabled = false; });
+        busy = false;
+      }
+    }
+
+    function formValues(form) {
+      return Object.fromEntries(new FormData(form));
+    }
+
+    function money(amount, currency) {
+      return new Intl.NumberFormat("en-KE", {
+        style: "currency", currency, currencyDisplay: "code",
+      }).format(Number(amount));
+    }
+
+    function makeButton(label, onClick) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "secondary";
+      button.textContent = label;
+      button.addEventListener("click", onClick);
+      return button;
+    }
+
+    function appendCells(row, values, numericColumns = []) {
+      values.forEach((value, index) => {
+        const cell = row.insertCell();
+        cell.textContent = value;
+        if (numericColumns.includes(index)) cell.className = "number";
+      });
+    }
+
+    async function loadPortfolios() {
+      const portfolios = await api("/portfolios");
+      const list = byId("portfolio-list");
+      list.replaceChildren();
+      for (const portfolio of portfolios) {
+        const item = document.createElement("li");
+        const label = `#${portfolio.id} · ${portfolio.name} · ${portfolio.client_name} (${portfolio.base_currency})`;
+        item.className = "portfolio";
+        item.append(makeButton(label, () => run("Loading portfolio…", async () => {
+          await loadPortfolio(portfolio.id);
+          byId("portfolio-title").focus();
+        })));
+        list.append(item);
+      }
+      byId("portfolio-empty").hidden = portfolios.length > 0;
+    }
+
+    function openPortfolioForm(portfolio) {
+      portfolioForm.reset();
+      editingId = portfolio?.id ?? null;
+      byId("portfolio-form-title").textContent = portfolio ? "Edit portfolio" : "New portfolio";
+      const fields = portfolioForm.elements;
+      if (portfolio) {
+        fields.name.value = portfolio.name;
+        fields.client_name.value = portfolio.client_name;
+        fields.base_currency.value = portfolio.base_currency;
+      }
+      fields.base_currency.disabled = Boolean(portfolio && trades.length);
+      byId("currency-note").hidden = !fields.base_currency.disabled;
+      portfolioForm.hidden = false;
+      fields.name.focus();
+    }
+
+    function renderHoldings(summary) {
+      const rows = byId("holdings-rows");
+      const bars = byId("chart-bars");
+      const holdings = summary.holdings;
+      const maxValue = Math.max(0, ...holdings.map((holding) => Number(holding.total_value)));
+      rows.replaceChildren();
+      bars.replaceChildren();
+
+      for (const holding of holdings) {
+        const format = (amount) => money(amount, summary.base_currency);
+        appendCells(rows.insertRow(), [
+          holding.instrument, holding.net_quantity, format(holding.average_cost),
+          format(holding.total_invested), format(holding.total_value),
+        ], [1, 2, 3, 4]);
+
+        const item = document.createElement("div");
+        item.className = "bar-line";
+        const label = document.createElement("div");
+        label.textContent = `${holding.instrument} · ${format(holding.total_value)}`;
+        const track = document.createElement("div");
+        const bar = document.createElement("div");
+        track.className = "track";
+        track.setAttribute("aria-hidden", "true");
+        bar.className = "bar";
+        bar.style.width = maxValue ? `${100 * Number(holding.total_value) / maxValue}%` : "0%";
+        track.append(bar);
+        item.append(label, track);
+        bars.append(item);
+      }
+      byId("holdings-empty").hidden = holdings.length > 0;
+      byId("holdings-scroll").hidden = holdings.length === 0;
+      byId("chart").hidden = holdings.length === 0;
+    }
+
+    function renderTrades() {
+      if (!activePortfolio) return;
+      const search = byId("trade-search").value.trim().toUpperCase();
+      const type = byId("trade-filter").value;
+      const sort = byId("trade-sort").value;
+      const visible = trades.filter((trade) =>
+        trade.instrument.toUpperCase().includes(search) && (!type || trade.type === type)
+      );
+
+      const byTime = (a, b) => a.trade_date.localeCompare(b.trade_date) || a.id - b.id;
+      visible.sort((a, b) => {
+        if (sort === "oldest") return byTime(a, b);
+        if (sort === "instrument") {
+          return a.instrument.localeCompare(b.instrument) || byTime(b, a);
+        }
+        return byTime(b, a);
+      });
+
+      const rows = byId("trade-rows");
+      rows.replaceChildren();
+      for (const trade of visible) {
+        const row = rows.insertRow();
+        appendCells(row, [
+          trade.trade_date, trade.instrument, trade.type, trade.quantity,
+          money(trade.unit_price, activePortfolio.base_currency),
+        ], [3, 4]);
+        const remove = makeButton("Delete", () => {
+          if (busy || !confirm(`Delete the ${trade.type} of ${trade.quantity} ${trade.instrument}?`)) return;
+          const portfolioId = activePortfolio.id;
+          run("Deleting trade…", async () => {
+            await api(`/transactions/${trade.id}`, { method: "DELETE" });
+            await loadPortfolio(portfolioId);
+            return "Trade deleted.";
+          });
+        });
+        remove.setAttribute("aria-label", `Delete ${trade.instrument} ${trade.type} trade ${trade.id}`);
+        row.insertCell().append(remove);
+      }
+      byId("trades-scroll").hidden = visible.length === 0;
+      const empty = byId("trades-empty");
+      empty.hidden = visible.length > 0;
+      empty.textContent = trades.length ? "No trades match these filters." : "No transactions yet.";
+    }
+
+    async function loadPortfolio(id) {
+      const path = `/portfolios/${id}`;
+      const portfolio = await api(path);
+      const [summary, transactions] = await Promise.all([
+        api(`${path}/summary`),
+        api(`${path}/transactions`),
+      ]);
+
+      if (activePortfolio?.id !== id) {
+        tradeForm.reset();
+        byId("trade-search").value = "";
+        byId("trade-filter").value = "";
+        byId("trade-sort").value = "newest";
+      }
+
+      activePortfolio = portfolio;
+      trades = transactions;
+      portfolioForm.hidden = true;
+      byId("portfolio-title").textContent = `#${id} · ${portfolio.name}`;
+      byId("portfolio-client").textContent = `${portfolio.client_name} (${portfolio.base_currency})`;
+      renderHoldings(summary);
+      renderTrades();
+      byId("details").hidden = false;
+    }
+
+    authForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const credentials = formValues(authForm);
+      credentials.username = credentials.username.trim();
+      run(registering ? "Creating account…" : "Signing in…", async () => {
+        if (registering) {
+          await api("/auth/register", { method: "POST", body: credentials });
+          setAuthMode(false);
+          authForm.elements.password.value = "";
+          authForm.elements.password.focus();
+          return "Account created. Enter your password to sign in.";
+        }
+
+        const login = await api("/auth/login", { method: "POST", body: credentials });
+        token = login.access_token;
+        try {
+          await loadPortfolios();
+        } catch (error) {
+          endSession();
+          throw error;
+        }
+
+        authForm.reset();
+        byId("auth").hidden = true;
+        byId("sign-out").hidden = false;
+        workspace.hidden = false;
+      });
+    });
+
+    byId("auth-toggle").addEventListener("click", () => {
+      setAuthMode(!registering);
+      showStatus("");
+      authForm.elements.username.focus();
+    });
+    byId("sign-out").addEventListener("click", () => { endSession(); showStatus("Signed out."); });
+    byId("new-portfolio").addEventListener("click", () => openPortfolioForm(null));
+    byId("edit-portfolio").addEventListener("click", () => openPortfolioForm(activePortfolio));
+    byId("cancel-portfolio").addEventListener("click", () => {
+      portfolioForm.hidden = true;
+      byId(editingId === null ? "new-portfolio" : "edit-portfolio").focus();
+    });
+
+    portfolioForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const body = formValues(portfolioForm);
+      body.name = body.name.trim();
+      body.client_name = body.client_name.trim();
+      body.base_currency = portfolioForm.elements.base_currency.value;
+      if (!body.name || !body.client_name) {
+        showStatus("Enter a portfolio name and a client name.", true);
+        return;
+      }
+
+      const id = editingId;
+      run("Saving portfolio…", async () => {
+        const saved = await api(id === null ? "/portfolios" : `/portfolios/${id}`, {
+          method: id === null ? "POST" : "PUT", body,
+        });
+        portfolioForm.hidden = true;
+        await loadPortfolios();
+        await loadPortfolio(saved.id);
+        byId("portfolio-title").focus();
+        return "Portfolio saved.";
+      });
+    });
+
+    byId("delete-portfolio").addEventListener("click", () => {
+      const { id, name } = activePortfolio;
+      if (!confirm(`Delete portfolio #${id} · ${name} and all its trades?`)) return;
+      run("Deleting portfolio…", async () => {
+        await api(`/portfolios/${id}`, { method: "DELETE" });
+        activePortfolio = null;
+        byId("details").hidden = true;
+        portfolioForm.hidden = true;
+        await loadPortfolios();
+        return "Portfolio deleted.";
+      });
+    });
+
+    tradeForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const body = formValues(tradeForm);
+      body.instrument = body.instrument.trim().toUpperCase();
+      if (!body.instrument) {
+        showStatus("Enter an instrument, such as SCOM.", true);
+        return;
+      }
+      const id = activePortfolio.id;
+      run("Recording trade…", async () => {
+        await api(`/portfolios/${id}/transactions`, { method: "POST", body });
+        tradeForm.reset();
+        await loadPortfolio(id);
+        return "Trade recorded.";
+      });
+    });
+
+    byId("trade-search").addEventListener("input", renderTrades);
+    byId("trade-filter").addEventListener("change", renderTrades);
+    byId("trade-sort").addEventListener("change", renderTrades);
+  </script>
+</body>
+</html>
