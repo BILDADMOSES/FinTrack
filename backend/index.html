@@ -4,142 +4,230 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FinTrack | Finnet Technologies</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23132139'/%3E%3Cpath d='M12 29V11h17v4H16v5h10v4H16v5z' fill='white'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23154740'/%3E%3Cpath d='M12 29V11h17v4H16v5h10v4H16v5z' fill='white'/%3E%3C/svg%3E">
+
   <style>
     :root {
       color-scheme: light;
-      --navy: #132139;
-      --accent: #2946aa;
-      --surface: #f3f5f8;
-      --paper: #fff;
-      --line: #c7d0df;
-      --muted: #4c5970;
-      --radius: .85rem;
+      --ink: #182a27;
+      --muted: #52645e;
+      --teal: #0e6156;
+      --teal-dark: #154740;
+      --canvas: #f2f5f1;
+      --paper: #fffefa;
+      --soft: #edf3ee;
+      --line: #d6dfd8;
+      --danger: #963434;
+      --radius: 1rem;
+      --shadow: 0 2px 4px #172a2908, 0 10px 30px #172a2908;
     }
 
-    * { box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; }
     [hidden] { display: none !important; }
 
     body {
       margin: 0;
-      color: var(--navy);
-      background: linear-gradient(155deg, #e8effb, var(--surface) 28rem);
-      font: 1rem/1.5 system-ui, sans-serif;
-      min-height: 100vh;
+      background: var(--canvas);
+      color: var(--ink);
+      font: 1rem/1.5 "Segoe UI", system-ui, -apple-system, sans-serif;
     }
 
-    header {
-      background: var(--navy);
-      color: var(--paper);
-      border-bottom: 3px solid #5e7bd6;
+    h1, h2, h3 {
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -.035em;
+      overflow-wrap: anywhere;
     }
 
-    .wrap { max-width: 75rem; margin: auto; padding: 1rem; }
-    .row { display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; }
-    h1, h2, h3 { margin: 0; line-height: 1.2; overflow-wrap: anywhere; }
-    h1 { font-size: 1.6rem; }
-    h2 { font-size: 1.3rem; }
+    h1 { font-size: clamp(1.65rem, 3vw, 2.45rem); }
+    h2 { font-size: 1.25rem; }
     h3 { font-size: 1.05rem; }
-    p { margin: .5rem 0; }
+    p { margin: 0; }
     .muted { color: var(--muted); }
-    .brand-credit { color: #d6e1ff; font-size: .9rem; }
 
-    .card {
+    .shell {
+      width: min(100%, 94rem);
+      margin-inline: auto;
+      padding-inline: clamp(.85rem, 2.8vw, 2.5rem);
+    }
+
+    .topbar { background: #102d29; color: #fff; }
+
+    .topbar-inner, .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .75rem;
+    }
+
+    .topbar-inner { min-height: 4.35rem; padding-block: .65rem; }
+    .brand { display: flex; align-items: center; gap: .65rem; }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 2.3rem;
+      height: 2.3rem;
+      border-radius: .65rem;
+      background: #c0e4d9;
+      color: #102d29;
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    .brand-name { font-size: 1.15rem; font-weight: 780; }
+    .brand-credit { color: #c3dfd6; font-size: .78rem; }
+    main.shell { padding-block: clamp(.85rem, 2vw, 1.6rem) 2rem; }
+
+    #status:not(:empty) {
+      margin-bottom: .85rem;
+      padding: .65rem .85rem;
+      border-radius: .65rem;
+      background: #e0eee8;
+      color: #134a40;
+      overflow-wrap: anywhere;
+    }
+
+    #status[data-error="true"]:not(:empty) {
+      background: #f8e8e6;
+      color: #7e2a2a;
+    }
+
+    .panel {
       min-width: 0;
-      margin-bottom: 1rem;
-      padding: 1rem;
+      padding: clamp(.9rem, 1.7vw, 1.35rem);
+      background: var(--paper);
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: var(--paper);
-      box-shadow: 0 4px 18px #1321390b;
+      box-shadow: var(--shadow);
     }
 
-    #auth { max-width: 29rem; margin: 2rem auto; padding: 1.5rem; }
-    #status { min-height: 1.5em; overflow-wrap: anywhere; }
-    #status[data-error="true"] { color: #9a2227; font-weight: 650; }
+    #auth {
+      width: min(100%, 29rem);
+      margin: clamp(1.5rem, 7vw, 5rem) auto;
+      padding: clamp(1.15rem, 4vw, 2rem);
+    }
 
-    form { display: grid; gap: .8rem; margin-top: .85rem; }
-    label { display: grid; gap: .3rem; min-width: 0; font-weight: 600; }
-    input, select, button { min-height: 2.75rem; border-radius: .45rem; font: inherit; }
+    #auth-title { font-size: 1.65rem; }
+    #auth-toggle { margin-top: .75rem; }
+
+    button, input, select {
+      min-height: 2.75rem;
+      border-radius: .6rem;
+      font: inherit;
+    }
+
+    button {
+      padding: .48rem .85rem;
+      border: 1px solid transparent;
+      background: var(--teal);
+      color: white;
+      cursor: pointer;
+      font-size: .875rem;
+      font-weight: 680;
+    }
+
+    button.secondary {
+      border-color: var(--line);
+      background: var(--paper);
+      color: var(--teal);
+    }
+
+    button.danger { color: var(--danger); }
+    button:hover:not(:disabled) { filter: brightness(.94); }
+    button:disabled { opacity: .6; cursor: wait; }
+    :focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
+    .topbar :focus-visible { outline-color: #c0e4d9; }
 
     input, select {
       width: 100%;
       padding: .45rem .6rem;
-      border: 1px solid #9eabc1;
-      color: var(--navy);
+      border: 1px solid #a3b4aa;
       background: var(--paper);
+      color: var(--ink);
     }
 
-    button {
-      padding: .45rem .8rem;
-      border: 1px solid var(--accent);
-      background: var(--accent);
-      color: var(--paper);
-      cursor: pointer;
-      font-weight: 650;
-    }
-
-    button.secondary { background: var(--paper); color: var(--accent); }
-    button:hover:not(:disabled) { filter: brightness(.94); }
-    button:disabled { opacity: .65; cursor: wait; }
-    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-    header :focus-visible { outline-color: var(--paper); }
+    label { display: grid; gap: .3rem; min-width: 0; font-size: .875rem; font-weight: 640; }
+    form { display: grid; gap: .8rem; margin-top: .85rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: .5rem; }
 
     .fields {
       display: grid;
-      gap: .8rem;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+      gap: .65rem;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
     }
 
-    .actions { display: flex; gap: .5rem; flex-wrap: wrap; }
-    #auth-toggle { margin-top: .8rem; }
-    #portfolio-list { list-style: none; padding: 0; margin: .8rem 0 0; }
-    #portfolio-list li + li { margin-top: .5rem; }
+    #workspace, #details { display: grid; gap: 1rem; min-width: 0; }
+    #portfolio-list { display: grid; gap: .45rem; padding: 0; margin: .85rem 0 0; list-style: none; }
+    #portfolio-empty, #currency-note, #holdings-empty, #trades-empty { margin-top: .65rem; }
 
     .portfolio-button {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: .15rem .5rem;
       width: 100%;
       text-align: left;
       overflow-wrap: anywhere;
     }
 
     .portfolio-button[aria-current="true"] {
-      background: #eaf0ff;
-      border-color: var(--accent);
+      background: #e2eee8;
+      border-color: #80ab9b;
+      box-shadow: inset 3px 0 var(--teal);
     }
+
+    .portfolio-client { grid-column: 1; color: var(--muted); font-size: .79rem; font-weight: 500; }
+    .currency { align-self: start; padding: .08rem .4rem; border-radius: .35rem; background: #e5eee8; font-size: .74rem; }
+    #portfolio-client { margin-top: .4rem; }
+    .description { margin-top: .35rem; font-size: .88rem; }
 
     .metrics {
       display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: .65rem;
-      margin: .9rem 0;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+      margin: 0;
     }
 
-    .metrics div { padding: .8rem; border-radius: .65rem; background: var(--surface); }
-    .metrics div:first-child { background: var(--navy); color: var(--paper); }
-    .metrics dt { color: var(--muted); font-size: .85rem; }
-    .metrics div:first-child dt { color: #d6e1ff; }
-    .metrics dd { margin: .15rem 0 0; font-size: 1.25rem; font-weight: 750; overflow-wrap: anywhere; }
-
-    figure {
-      margin: 1rem 0;
-      padding: 1rem 0;
-      border-block: 1px solid var(--line);
+    .metric {
+      min-width: 0;
+      padding: .85rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
     }
 
-    figcaption { font-weight: 750; }
-    .allocation { display: grid; gap: 1rem; align-items: center; }
+    .metric:first-child { background: var(--teal-dark); border-color: var(--teal-dark); color: #fff; }
+    .metric dt { color: var(--muted); font-size: .8rem; font-weight: 650; }
+    .metric:first-child dt { color: #d3ebe2; }
+
+    .metric dd {
+      margin: .25rem 0 0;
+      font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+      font-variant-numeric: tabular-nums;
+      font-weight: 770;
+      letter-spacing: -.04em;
+      overflow-wrap: anywhere;
+    }
+
+    .overview { display: grid; gap: 1rem; min-width: 0; }
+    figure { margin: 0; }
+    #allocation-insight { margin: .45rem 0 .85rem; color: var(--teal); font-weight: 650; }
+    .allocation { display: grid; align-items: center; gap: .85rem; min-width: 0; }
+
     .ring {
       display: grid;
       place-items: center;
-      width: min(8.5rem, 100%);
+      width: min(10rem, 100%);
       aspect-ratio: 1;
-      border-radius: 50%;
       margin: auto;
+      border-radius: 50%;
     }
 
     .ring::after {
       content: "";
-      width: 62%;
+      width: 66%;
       aspect-ratio: 1;
       border-radius: 50%;
       background: var(--paper);
@@ -150,54 +238,83 @@
       display: grid;
       grid-template-columns: auto minmax(0, 1fr) auto;
       align-items: center;
-      gap: .5rem;
+      gap: .45rem;
       padding: .4rem 0;
       border-bottom: 1px solid var(--line);
+      font-size: .86rem;
       overflow-wrap: anywhere;
     }
 
-    .swatch { width: .7rem; height: .7rem; border-radius: 50%; }
-    .scroll { overflow-x: auto; margin-top: .65rem; }
+    .legend strong { font-variant-numeric: tabular-nums; }
+    .swatch { width: .65rem; height: .65rem; border-radius: 50%; }
+    .scroll { max-width: 100%; overflow-x: auto; overscroll-behavior-inline: contain; margin-top: .7rem; }
     table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-    th, td { white-space: nowrap; padding: .55rem .6rem; border-bottom: 1px solid var(--line); text-align: left; }
-    th { background: var(--surface); }
+    th, td { padding: .56rem .6rem; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+    th { background: var(--soft); color: var(--muted); font-size: .78rem; font-weight: 700; }
+    td { font-size: .875rem; }
     .number { text-align: right; }
-    .filters { margin-top: .75rem; }
 
-    @media (min-width: 34rem) {
-      .allocation { grid-template-columns: 9rem minmax(0, 1fr); }
+    .trade-label {
+      display: inline-block;
+      padding: .12rem .45rem;
+      border-radius: .35rem;
+      background: #e1eee8;
+      color: #164d41;
+      font-size: .76rem;
+      font-weight: 750;
     }
 
-    @media (min-width: 55rem) {
-      #workspace {
-        display: grid;
-        grid-template-columns: minmax(14rem, 1fr) minmax(0, 2.5fr);
-        gap: 1rem;
-        align-items: start;
-      }
+    .trade-label.sell { background: #f4e9df; color: #773c20; }
+    .trade-delete { min-height: 2.25rem; padding: .25rem .55rem; }
+    .filters { margin-top: .75rem; }
+
+    @media (min-width: 40rem) {
+      .allocation { grid-template-columns: minmax(0, 8rem) minmax(0, 1fr); }
+    }
+
+    @media (min-width: 57rem) {
+      #workspace { grid-template-columns: 15rem minmax(0, 1fr); align-items: start; }
+      .sidebar { position: sticky; top: 1rem; }
+    }
+
+    @media (min-width: 80rem) {
+      .overview { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); align-items: start; }
+      .overview .allocation { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 34rem) {
+      #workspace, #details, .overview { gap: .75rem; }
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .metric:first-child { grid-column: 1 / -1; }
+      .metric { padding: .75rem; }
     }
   </style>
 </head>
+
 <body>
-  <header>
-    <div class="wrap row">
-      <div>
-        <h1>FinTrack</h1>
-        <span class="brand-credit">by Finnet Technologies</span>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">F</span>
+        <div>
+          <div class="brand-name">FinTrack</div>
+          <div class="brand-credit">by Finnet Technologies</div>
+        </div>
       </div>
       <button id="sign-out" class="secondary" type="button" hidden>Sign out</button>
     </div>
   </header>
 
-  <main class="wrap">
-    <p id="status" role="status" aria-live="polite"></p>
+  <main class="shell">
+    <div id="status" role="status" aria-live="polite"></div>
 
-    <section id="auth" class="card" aria-labelledby="auth-title">
-      <h2 id="auth-title">Sign in</h2>
+    <section id="auth" class="panel" aria-labelledby="auth-title">
+      <h1 id="auth-title">Sign in</h1>
       <form id="auth-form">
         <label>Username
           <input name="username" autocomplete="username" required minlength="3"
-                 maxlength="50" pattern="[a-zA-Z0-9_]+">
+                 maxlength="50" pattern="[a-zA-Z0-9_]+"
+                 title="Use letters, numbers, or underscores.">
         </label>
         <label>Password
           <input name="password" type="password" autocomplete="current-password"
@@ -209,9 +326,9 @@
     </section>
 
     <div id="workspace" hidden>
-      <section class="card" aria-labelledby="portfolios-title">
-        <div class="row">
-          <h2 id="portfolios-title">Your portfolios</h2>
+      <section class="panel sidebar" aria-labelledby="portfolios-title">
+        <div class="section-head">
+          <h2 id="portfolios-title">Portfolios</h2>
           <button id="new-portfolio" type="button">New portfolio</button>
         </div>
 
@@ -234,91 +351,65 @@
       </section>
 
       <section id="details" aria-labelledby="portfolio-title" hidden>
-        <div class="card">
-          <div class="row">
-            <h2 id="portfolio-title" tabindex="-1"></h2>
+        <div class="panel">
+          <div class="section-head">
+            <div>
+              <h1 id="portfolio-title" tabindex="-1"></h1>
+              <p id="portfolio-client" class="muted"></p>
+            </div>
             <div class="actions">
-              <button id="edit-portfolio" class="secondary" type="button">Edit</button>
-              <button id="delete-portfolio" class="secondary" type="button">Delete portfolio</button>
+              <button id="edit-portfolio" class="secondary" type="button">Edit portfolio</button>
+              <button id="delete-portfolio" class="secondary danger" type="button">Delete portfolio</button>
             </div>
           </div>
-          <p id="portfolio-client" class="muted"></p>
         </div>
 
-        <div class="card">
-          <h3>Current holdings</h3>
-          <p class="muted">Estimated values use the latest recorded trade price for each instrument.</p>
+        <dl class="metrics">
+          <div class="metric"><dt>Estimated value</dt><dd id="metric-value"></dd></div>
+          <div class="metric"><dt>Holdings cost</dt><dd id="metric-cost"></dd></div>
+          <div class="metric"><dt>Holdings</dt><dd id="metric-count"></dd></div>
+        </dl>
 
-          <dl class="metrics">
-            <div><dt>Estimated value</dt><dd id="metric-value"></dd></div>
-            <div><dt>Cost of current holdings</dt><dd id="metric-cost"></dd></div>
-            <div><dt>Number of holdings</dt><dd id="metric-count"></dd></div>
-          </dl>
-
-          <figure id="chart" hidden>
-            <figcaption>Share of estimated portfolio value</figcaption>
-            <p id="allocation-insight" class="muted"></p>
+        <div class="overview">
+          <figure id="chart" class="panel" hidden>
+            <figcaption><h2>Portfolio allocation</h2></figcaption>
+            <p id="allocation-insight"></p>
             <div class="allocation">
               <div id="allocation-ring" class="ring" aria-hidden="true"></div>
               <ul id="allocation-legend" class="legend"></ul>
             </div>
           </figure>
 
-          <p id="holdings-empty" hidden>No current holdings.</p>
-          <div id="holdings-scroll" class="scroll" tabindex="0" role="region" aria-label="Holdings table">
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col">Instrument</th>
-                  <th scope="col" class="number">Units</th>
-                  <th scope="col" class="number">Average cost</th>
-                  <th scope="col" class="number">Invested</th>
-                  <th scope="col" class="number">Estimated value</th>
-                </tr>
-              </thead>
-              <tbody id="holdings-rows"></tbody>
-            </table>
-          </div>
+          <section class="panel" aria-labelledby="holdings-title">
+            <h2 id="holdings-title">Current holdings</h2>
+            <p class="description muted">Estimated value uses the latest recorded trade price for each instrument.</p>
+            <p id="holdings-empty" class="muted" hidden>No current holdings.</p>
+            <div id="holdings-scroll" class="scroll" tabindex="0" role="region" aria-label="Holdings table">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Instrument</th>
+                    <th scope="col" class="number">Units</th>
+                    <th scope="col" class="number">Average cost</th>
+                    <th scope="col" class="number">Invested</th>
+                    <th scope="col" class="number">Est. value</th>
+                  </tr>
+                </thead>
+                <tbody id="holdings-rows"></tbody>
+              </table>
+            </div>
+          </section>
         </div>
 
-        <div class="card">
-          <h3>Transaction history</h3>
-          <div class="fields filters">
-            <label>Filter by instrument
-              <input id="trade-search" type="search" placeholder="e.g. SCOM">
-            </label>
-            <label>Trade type
-              <select id="trade-filter">
-                <option value="">All types</option><option>BUY</option><option>SELL</option>
-              </select>
-            </label>
-            <label>Sort trades
-              <select id="trade-sort">
-                <option value="newest">Newest first</option>
-                <option value="oldest">Oldest first</option>
-                <option value="instrument">Instrument A–Z</option>
-              </select>
-            </label>
+        <section class="panel" aria-labelledby="trades-title">
+          <div class="section-head">
+            <h2 id="trades-title">Transaction history</h2>
+            <button id="toggle-trade" type="button" aria-expanded="false" aria-controls="trade-form">
+              Record a trade
+            </button>
           </div>
 
-          <p id="trades-empty" hidden></p>
-          <div id="trades-scroll" class="scroll" tabindex="0" role="region" aria-label="Transactions table">
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col">Trade date</th><th scope="col">Instrument</th>
-                  <th scope="col">Type</th><th scope="col" class="number">Units</th>
-                  <th scope="col" class="number">Unit price</th><th scope="col">Action</th>
-                </tr>
-              </thead>
-              <tbody id="trade-rows"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>Record a trade</h3>
-          <form id="trade-form">
+          <form id="trade-form" hidden>
             <div class="fields">
               <label>Instrument
                 <input name="instrument" placeholder="e.g. SCOM" required maxlength="30">
@@ -334,9 +425,47 @@
               </label>
               <label>Trade date <input name="trade_date" type="date" required></label>
             </div>
-            <div><button type="submit">Record trade</button></div>
+            <div class="actions">
+              <button type="submit">Save trade</button>
+              <button id="cancel-trade" class="secondary" type="button">Cancel</button>
+            </div>
           </form>
-        </div>
+
+          <div class="fields filters">
+            <label>Instrument
+              <input id="trade-search" type="search" placeholder="Search instruments">
+            </label>
+            <label>Trade type
+              <select id="trade-filter">
+                <option value="">All types</option><option>BUY</option><option>SELL</option>
+              </select>
+            </label>
+            <label>Sort by
+              <select id="trade-sort">
+                <option value="newest">Newest first</option>
+                <option value="oldest">Oldest first</option>
+                <option value="instrument">Instrument A–Z</option>
+              </select>
+            </label>
+          </div>
+
+          <p id="trades-empty" class="muted" hidden></p>
+          <div id="trades-scroll" class="scroll" tabindex="0" role="region" aria-label="Transactions table">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Instrument</th>
+                  <th scope="col">Type</th>
+                  <th scope="col" class="number">Units</th>
+                  <th scope="col" class="number">Unit price</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody id="trade-rows"></tbody>
+            </table>
+          </div>
+        </section>
       </section>
     </div>
   </main>
@@ -347,10 +476,7 @@
     const portfolioForm = byId("portfolio-form");
     const tradeForm = byId("trade-form");
     const portfolioFields = portfolioForm.elements;
-
-    const chartColors = [
-      "#2946aa", "#18807d", "#bd641c", "#7954a0", "#687891", "#a43a61",
-    ];
+    const chartColors = ["#16766a", "#477ba8", "#b47929", "#875789", "#69824c", "#a65254"];
     const percent = new Intl.NumberFormat("en-KE", {
       style: "percent",
       maximumFractionDigits: 1,
@@ -379,6 +505,12 @@
       authForm.elements.password.value = "";
     }
 
+    function setTradeForm(open) {
+      tradeForm.hidden = !open;
+      byId("toggle-trade").setAttribute("aria-expanded", String(open));
+      if (open) tradeForm.elements.instrument.focus();
+    }
+
     function endSession() {
       token = "";
       activePortfolio = null;
@@ -388,12 +520,10 @@
       byId("details").hidden = true;
       byId("sign-out").hidden = true;
       byId("portfolio-list").replaceChildren();
-      byId("holdings-rows").replaceChildren();
-      byId("trade-rows").replaceChildren();
-      byId("allocation-legend").replaceChildren();
-      portfolioForm.hidden = true;
       portfolioForm.reset();
+      portfolioForm.hidden = true;
       tradeForm.reset();
+      setTradeForm(false);
       authForm.reset();
       setAuthMode(false);
       byId("auth").hidden = false;
@@ -402,7 +532,8 @@
 
     async function api(path, { method = "GET", body } = {}) {
       const headers = {};
-      if (token) headers.Authorization = `Bearer ${token}`;
+      const requestToken = token;
+      if (requestToken) headers.Authorization = `Bearer ${requestToken}`;
       if (body !== undefined) headers["Content-Type"] = "application/json";
 
       let response;
@@ -420,8 +551,8 @@
       const data = await response.json().catch(() => null);
       if (response.ok && data !== null) return data;
 
-      if (response.status === 401 && token) {
-        endSession();
+      if (response.status === 401 && requestToken) {
+        if (token === requestToken) endSession();
         throw new Error("Your session ended. Sign in again.");
       }
       if (typeof data?.detail === "string") throw new Error(data.detail);
@@ -438,13 +569,17 @@
       for (const button of buttons) button.disabled = true;
       showStatus(message);
 
+      let focusTarget;
       try {
-        showStatus((await action()) ?? "");
+        const result = await action();
+        showStatus(result?.message ?? "");
+        focusTarget = result?.focus;
       } catch (error) {
         showStatus(error.message, true);
       } finally {
         for (const button of buttons) button.disabled = false;
         busy = false;
+        focusTarget?.focus();
       }
     }
 
@@ -469,18 +604,18 @@
       return button;
     }
 
-    function appendCells(row, values, numericColumns = []) {
-      values.forEach((value, index) => {
-        const cell = row.insertCell();
-        cell.textContent = value;
-        if (numericColumns.includes(index)) cell.className = "number";
-      });
+    function addCell(row, value, numeric = false) {
+      const cell = row.insertCell();
+      cell.textContent = value;
+      if (numeric) cell.className = "number";
+      return cell;
     }
 
     function highlightPortfolio() {
       for (const button of byId("portfolio-list").querySelectorAll("button")) {
         const selected = Number(button.dataset.portfolioId) === activePortfolio?.id;
-        button.setAttribute("aria-current", String(selected));
+        if (selected) button.setAttribute("aria-current", "true");
+        else button.removeAttribute("aria-current");
       }
     }
 
@@ -491,14 +626,26 @@
 
       for (const portfolio of portfolios) {
         const item = document.createElement("li");
-        const label = `#${portfolio.id} · ${portfolio.name} (${portfolio.base_currency})`;
-        const button = makeButton(label, () => run("Loading portfolio…", async () => {
+        const button = makeButton("", () => run("Loading portfolio…", async () => {
           await loadPortfolio(portfolio.id);
-          byId("portfolio-title").focus();
+          return { focus: byId("portfolio-title") };
         }));
 
         button.classList.add("portfolio-button");
         button.dataset.portfolioId = portfolio.id;
+
+        const name = document.createElement("span");
+        name.textContent = portfolio.name;
+
+        const currency = document.createElement("span");
+        currency.className = "currency";
+        currency.textContent = portfolio.base_currency;
+
+        const client = document.createElement("span");
+        client.className = "portfolio-client";
+        client.textContent = portfolio.client_name;
+
+        button.append(name, currency, client);
         item.append(button);
         list.append(item);
       }
@@ -509,6 +656,7 @@
     }
 
     function openPortfolioForm(portfolio) {
+      if (busy) return;
       portfolioForm.reset();
       editingId = portfolio?.id ?? null;
       byId("portfolio-form-title").textContent = portfolio ? "Edit portfolio" : "New portfolio";
@@ -530,8 +678,8 @@
         (a, b) => Number(b.total_value) - Number(a.total_value)
       );
       const format = (amount) => money(amount, summary.base_currency);
-      const value = holdings.reduce((total, row) => total + Number(row.total_value), 0);
-      const cost = holdings.reduce((total, row) => total + Number(row.total_invested), 0);
+      const value = holdings.reduce((sum, row) => sum + Number(row.total_value), 0);
+      const cost = holdings.reduce((sum, row) => sum + Number(row.total_invested), 0);
 
       byId("metric-value").textContent = format(value);
       byId("metric-cost").textContent = format(cost);
@@ -541,15 +689,13 @@
 
       const rows = byId("holdings-rows");
       rows.replaceChildren();
-
       for (const holding of holdings) {
-        appendCells(rows.insertRow(), [
-          holding.instrument,
-          holding.net_quantity,
-          format(holding.average_cost),
-          format(holding.total_invested),
-          format(holding.total_value),
-        ], [1, 2, 3, 4]);
+        const row = rows.insertRow();
+        addCell(row, holding.instrument);
+        addCell(row, holding.net_quantity, true);
+        addCell(row, format(holding.average_cost), true);
+        addCell(row, format(holding.total_invested), true);
+        addCell(row, format(holding.total_value), true);
       }
 
       const chart = byId("chart");
@@ -563,13 +709,15 @@
       const share = (holding) => Number(holding.total_value) / value;
       const largest = holdings[0];
       byId("allocation-insight").textContent =
-        `${largest.instrument} accounts for ${percent.format(share(largest))} of estimated value.`;
+        \`\${largest.instrument} accounts for \${percent.format(share(largest))} of estimated value.\`;
 
-      let angle = 0;
-      const slices = holdings.map((holding, index) => {
+      let start = 0;
+      const slices = [];
+      holdings.forEach((holding, index) => {
         const color = chartColors[index % chartColors.length];
-        const start = angle;
-        angle = index === holdings.length - 1 ? 360 : angle + 360 * share(holding);
+        const end = index === holdings.length - 1 ? 100 : start + 100 * share(holding);
+        slices.push(\`\${color} \${start}% \${end}%\`);
+        start = end;
 
         const item = document.createElement("li");
         const swatch = document.createElement("span");
@@ -578,22 +726,19 @@
         swatch.setAttribute("aria-hidden", "true");
 
         const label = document.createElement("span");
-        label.textContent = `${holding.instrument} · ${format(holding.total_value)}`;
+        label.textContent = \`\${holding.instrument} · \${format(holding.total_value)}\`;
 
         const percentage = document.createElement("strong");
         percentage.textContent = percent.format(share(holding));
         item.append(swatch, label, percentage);
         legend.append(item);
-
-        return `${color} ${start}deg ${angle}deg`;
       });
 
-      ring.style.background = `conic-gradient(${slices.join(", ")})`;
+      ring.style.background = \`conic-gradient(\${slices.join(", ")})\`;
     }
 
     function renderTrades() {
       if (!activePortfolio) return;
-
       const search = byId("trade-search").value.trim().toUpperCase();
       const type = byId("trade-filter").value;
       const sort = byId("trade-sort").value;
@@ -601,11 +746,11 @@
         trade.instrument.toUpperCase().includes(search) && (!type || trade.type === type)
       );
 
-      const byTime = (a, b) => a.trade_date.localeCompare(b.trade_date) || a.id - b.id;
+      const byDate = (a, b) => a.trade_date.localeCompare(b.trade_date) || a.id - b.id;
       visible.sort((a, b) => {
-        if (sort === "oldest") return byTime(a, b);
-        if (sort === "instrument") return a.instrument.localeCompare(b.instrument) || byTime(b, a);
-        return byTime(b, a);
+        if (sort === "oldest") return byDate(a, b);
+        if (sort === "instrument") return a.instrument.localeCompare(b.instrument) || byDate(b, a);
+        return byDate(b, a);
       });
 
       const rows = byId("trade-rows");
@@ -613,25 +758,29 @@
 
       for (const trade of visible) {
         const row = rows.insertRow();
-        appendCells(row, [
-          trade.trade_date,
-          trade.instrument,
-          trade.type,
-          trade.quantity,
-          money(trade.unit_price, activePortfolio.base_currency),
-        ], [3, 4]);
+        addCell(row, trade.trade_date);
+        addCell(row, trade.instrument);
+
+        const tag = document.createElement("span");
+        tag.className = trade.type === "SELL" ? "trade-label sell" : "trade-label";
+        tag.textContent = trade.type;
+        row.insertCell().append(tag);
+
+        addCell(row, trade.quantity, true);
+        addCell(row, money(trade.unit_price, activePortfolio.base_currency), true);
 
         const remove = makeButton("Delete", () => {
-          if (busy || !confirm(`Delete the ${trade.type} of ${trade.quantity} ${trade.instrument}?`)) return;
+          if (busy || !confirm(\`Delete the \${trade.type} of \${trade.quantity} \${trade.instrument}?\`)) return;
           const portfolioId = activePortfolio.id;
           run("Deleting trade…", async () => {
-            await api(`/transactions/${trade.id}`, { method: "DELETE" });
+            await api(\`/transactions/\${trade.id}\`, { method: "DELETE" });
             await loadPortfolio(portfolioId);
-            return "Trade deleted.";
+            return { message: "Trade deleted.", focus: byId("toggle-trade") };
           });
         });
 
-        remove.setAttribute("aria-label", `Delete ${trade.instrument} ${trade.type} trade ${trade.id}`);
+        remove.classList.add("danger", "trade-delete");
+        remove.setAttribute("aria-label", \`Delete \${trade.instrument} \${trade.type} trade \${trade.id}\`);
         row.insertCell().append(remove);
       }
 
@@ -642,15 +791,16 @@
     }
 
     async function loadPortfolio(id) {
-      const path = `/portfolios/${id}`;
+      const path = \`/portfolios/\${id}\`;
       const [portfolio, summary, transactions] = await Promise.all([
         api(path),
-        api(`${path}/summary`),
-        api(`${path}/transactions`),
+        api(\`\${path}/summary\`),
+        api(\`\${path}/transactions\`),
       ]);
 
       if (activePortfolio?.id !== id) {
         tradeForm.reset();
+        setTradeForm(false);
         byId("trade-search").value = "";
         byId("trade-filter").value = "";
         byId("trade-sort").value = "newest";
@@ -659,9 +809,9 @@
       activePortfolio = portfolio;
       trades = transactions;
       portfolioForm.hidden = true;
-
-      byId("portfolio-title").textContent = `#${portfolio.id} · ${portfolio.name}`;
-      byId("portfolio-client").textContent = `${portfolio.client_name} (${portfolio.base_currency})`;
+      byId("portfolio-title").textContent = portfolio.name;
+      byId("portfolio-client").textContent =
+        \`\${portfolio.client_name} · \${portfolio.base_currency}\`;
       renderHoldings(summary);
       renderTrades();
       highlightPortfolio();
@@ -677,8 +827,10 @@
         if (registering) {
           await api("/auth/register", { method: "POST", body: credentials });
           setAuthMode(false);
-          authForm.elements.password.focus();
-          return "Account created. Enter your password to sign in.";
+          return {
+            message: "Account created. Enter your password to sign in.",
+            focus: authForm.elements.password,
+          };
         }
 
         const login = await api("/auth/login", { method: "POST", body: credentials });
@@ -702,10 +854,10 @@
             portfolio.client_name === "Jane Mwangi" && portfolio.base_currency === "KES"
           ) ?? portfolios[0];
           await loadPortfolio(featured.id);
-          byId("portfolio-title").focus();
-        } else {
-          byId("new-portfolio").focus();
+          return { focus: byId("portfolio-title") };
         }
+
+        return { focus: byId("new-portfolio") };
       });
     });
 
@@ -716,6 +868,7 @@
     });
 
     byId("sign-out").addEventListener("click", () => {
+      if (busy) return;
       endSession();
       showStatus("Signed out.");
     });
@@ -742,31 +895,39 @@
 
       const id = editingId;
       run("Saving portfolio…", async () => {
-        const saved = await api(id === null ? "/portfolios" : `/portfolios/${id}`, {
+        const saved = await api(id === null ? "/portfolios" : \`/portfolios/\${id}\`, {
           method: id === null ? "POST" : "PUT",
           body,
         });
         portfolioForm.hidden = true;
         await loadPortfolios();
         await loadPortfolio(saved.id);
-        byId("portfolio-title").focus();
-        return "Portfolio saved.";
+        return { message: "Portfolio saved.", focus: byId("portfolio-title") };
       });
     });
 
     byId("delete-portfolio").addEventListener("click", () => {
       if (!activePortfolio || busy) return;
       const { id, name } = activePortfolio;
-      if (!confirm(`Delete portfolio #${id} · ${name} and all its trades?`)) return;
+      if (!confirm(\`Delete \${name} and all its trades?\`)) return;
 
       run("Deleting portfolio…", async () => {
-        await api(`/portfolios/${id}`, { method: "DELETE" });
+        await api(\`/portfolios/\${id}\`, { method: "DELETE" });
         activePortfolio = null;
+        trades = [];
         byId("details").hidden = true;
         portfolioForm.hidden = true;
+        tradeForm.reset();
+        setTradeForm(false);
         await loadPortfolios();
-        return "Portfolio deleted.";
+        return { message: "Portfolio deleted.", focus: byId("new-portfolio") };
       });
+    });
+
+    byId("toggle-trade").addEventListener("click", () => setTradeForm(tradeForm.hidden));
+    byId("cancel-trade").addEventListener("click", () => {
+      setTradeForm(false);
+      byId("toggle-trade").focus();
     });
 
     tradeForm.addEventListener("submit", (event) => {
@@ -782,10 +943,11 @@
 
       const id = activePortfolio.id;
       run("Recording trade…", async () => {
-        await api(`/portfolios/${id}/transactions`, { method: "POST", body });
+        await api(\`/portfolios/\${id}/transactions\`, { method: "POST", body });
         tradeForm.reset();
+        setTradeForm(false);
         await loadPortfolio(id);
-        return "Trade recorded.";
+        return { message: "Trade recorded.", focus: byId("toggle-trade") };
       });
     });
 
