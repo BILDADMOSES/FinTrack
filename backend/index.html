@@ -5,21 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FinTrack | Finnet Technologies</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='%23154740'/%3E%3Cpath d='M12 29V11h17v4H16v5h10v4H16v5z' fill='white'/%3E%3C/svg%3E">
-
   <style>
     :root {
-      color-scheme: light;
       --ink: #182a27;
-      --muted: #52645e;
+      --muted: #50645d;
       --teal: #0e6156;
-      --teal-dark: #154740;
+      --deep: #123b34;
       --canvas: #f2f5f1;
       --paper: #fffefa;
-      --soft: #edf3ee;
-      --line: #d6dfd8;
-      --danger: #963434;
+      --soft: #ebf2ed;
+      --line: #d4ded7;
+      --danger: #913636;
       --radius: 1rem;
-      --shadow: 0 2px 4px #172a2908, 0 10px 30px #172a2908;
+      color-scheme: light;
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -27,130 +25,120 @@
 
     body {
       margin: 0;
+      min-height: 100vh;
       background: var(--canvas);
       color: var(--ink);
-      font: 1rem/1.5 "Segoe UI", system-ui, -apple-system, sans-serif;
+      font: 1rem/1.5 "Segoe UI", system-ui, sans-serif;
     }
 
     h1, h2, h3 {
       margin: 0;
-      line-height: 1.15;
-      letter-spacing: -.035em;
+      line-height: 1.2;
+      letter-spacing: -.025em;
       overflow-wrap: anywhere;
     }
 
-    h1 { font-size: clamp(1.65rem, 3vw, 2.45rem); }
-    h2 { font-size: 1.25rem; }
+    h1 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
+    h2 { font-size: 1.2rem; }
     h3 { font-size: 1.05rem; }
-    p { margin: 0; }
-    .muted { color: var(--muted); }
+    p { margin: .45rem 0 0; }
 
     .shell {
       width: min(100%, 94rem);
       margin-inline: auto;
-      padding-inline: clamp(.85rem, 2.8vw, 2.5rem);
+      padding-inline: clamp(.85rem, 2.7vw, 2.5rem);
     }
 
-    .topbar { background: #102d29; color: #fff; }
+    header { background: #102e29; color: white; }
+    header .shell { min-height: 4.3rem; padding-block: .6rem; }
 
-    .topbar-inner, .section-head {
+    .row, .brand, .actions {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       flex-wrap: wrap;
-      gap: .75rem;
+      gap: .65rem;
     }
 
-    .topbar-inner { min-height: 4.35rem; padding-block: .65rem; }
-    .brand { display: flex; align-items: center; gap: .65rem; }
+    .row { justify-content: space-between; }
+    .brand { flex-wrap: nowrap; }
+    .brand strong { display: block; font-size: 1.15rem; }
+    .brand small { display: block; color: #c3dfd6; }
 
-    .brand-mark {
+    .mark {
       display: grid;
       place-items: center;
-      width: 2.3rem;
-      height: 2.3rem;
+      width: 2.35rem;
+      height: 2.35rem;
       border-radius: .65rem;
       background: #c0e4d9;
-      color: #102d29;
-      font-size: 1.1rem;
+      color: #102e29;
       font-weight: 800;
     }
 
-    .brand-name { font-size: 1.15rem; font-weight: 780; }
-    .brand-credit { color: #c3dfd6; font-size: .78rem; }
-    main.shell { padding-block: clamp(.85rem, 2vw, 1.6rem) 2rem; }
+    main.shell { padding-block: 1.2rem 2rem; }
+
+    .panel, .metric {
+      min-width: 0;
+      padding: clamp(.9rem, 1.8vw, 1.35rem);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: 0 6px 22px rgb(18 59 52 / 5%);
+    }
+
+    #auth { max-width: 28rem; margin: clamp(1.5rem, 7vw, 5rem) auto; }
+    #auth-toggle { margin-top: .8rem; }
+    .muted { color: var(--muted); }
+    .small { font-size: .875rem; }
 
     #status:not(:empty) {
-      margin-bottom: .85rem;
+      margin: 0 0 .85rem;
       padding: .65rem .85rem;
       border-radius: .65rem;
       background: #e0eee8;
-      color: #134a40;
+      color: var(--deep);
       overflow-wrap: anywhere;
     }
 
     #status[data-error="true"]:not(:empty) {
       background: #f8e8e6;
-      color: #7e2a2a;
+      color: var(--danger);
     }
-
-    .panel {
-      min-width: 0;
-      padding: clamp(.9rem, 1.7vw, 1.35rem);
-      background: var(--paper);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-
-    #auth {
-      width: min(100%, 29rem);
-      margin: clamp(1.5rem, 7vw, 5rem) auto;
-      padding: clamp(1.15rem, 4vw, 2rem);
-    }
-
-    #auth-title { font-size: 1.65rem; }
-    #auth-toggle { margin-top: .75rem; }
 
     button, input, select {
       min-height: 2.75rem;
-      border-radius: .6rem;
+      border-radius: .55rem;
       font: inherit;
     }
 
     button {
-      padding: .48rem .85rem;
+      padding: .45rem .8rem;
       border: 1px solid transparent;
       background: var(--teal);
       color: white;
       cursor: pointer;
       font-size: .875rem;
-      font-weight: 680;
+      font-weight: 650;
     }
 
-    button.secondary {
-      border-color: var(--line);
-      background: var(--paper);
-      color: var(--teal);
-    }
-
+    button.secondary { background: var(--paper); border-color: var(--line); color: var(--teal); }
     button.danger { color: var(--danger); }
     button:hover:not(:disabled) { filter: brightness(.94); }
-    button:disabled { opacity: .6; cursor: wait; }
+    button:disabled { opacity: .65; cursor: wait; }
     :focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
-    .topbar :focus-visible { outline-color: #c0e4d9; }
+    header :focus-visible { outline-color: #c0e4d9; }
 
     input, select {
+      min-width: 0;
       width: 100%;
       padding: .45rem .6rem;
-      border: 1px solid #a3b4aa;
+      border: 1px solid #a1b2a8;
       background: var(--paper);
       color: var(--ink);
     }
 
-    label { display: grid; gap: .3rem; min-width: 0; font-size: .875rem; font-weight: 640; }
-    form { display: grid; gap: .8rem; margin-top: .85rem; }
-    .actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+    label { display: grid; gap: .3rem; min-width: 0; font-weight: 600; font-size: .875rem; }
+    form { display: grid; gap: .75rem; margin-top: .85rem; }
 
     .fields {
       display: grid;
@@ -158,14 +146,13 @@
       grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
     }
 
-    #workspace, #details { display: grid; gap: 1rem; min-width: 0; }
-    #portfolio-list { display: grid; gap: .45rem; padding: 0; margin: .85rem 0 0; list-style: none; }
-    #portfolio-empty, #currency-note, #holdings-empty, #trades-empty { margin-top: .65rem; }
+    #workspace, #details, .overview { display: grid; gap: 1rem; min-width: 0; }
+    #portfolio-list { display: grid; gap: .5rem; list-style: none; padding: 0; margin: .85rem 0 0; }
 
     .portfolio-button {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
-      gap: .15rem .5rem;
+      gap: .2rem .5rem;
       width: 100%;
       text-align: left;
       overflow-wrap: anywhere;
@@ -177,63 +164,46 @@
       box-shadow: inset 3px 0 var(--teal);
     }
 
-    .portfolio-client { grid-column: 1; color: var(--muted); font-size: .79rem; font-weight: 500; }
-    .currency { align-self: start; padding: .08rem .4rem; border-radius: .35rem; background: #e5eee8; font-size: .74rem; }
-    #portfolio-client { margin-top: .4rem; }
-    .description { margin-top: .35rem; font-size: .88rem; }
+    .client { grid-column: 1; color: var(--muted); font-size: .8rem; font-weight: 500; }
+    .currency { align-self: start; padding: .1rem .4rem; border-radius: .35rem; background: var(--soft); font-size: .75rem; }
 
-    .metrics {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: .65rem;
-      margin: 0;
-    }
-
-    .metric {
-      min-width: 0;
-      padding: .85rem 1rem;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: var(--paper);
-      box-shadow: var(--shadow);
-    }
-
-    .metric:first-child { background: var(--teal-dark); border-color: var(--teal-dark); color: #fff; }
-    .metric dt { color: var(--muted); font-size: .8rem; font-weight: 650; }
+    .metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .65rem; margin: 0; }
+    .metric:first-child { background: var(--deep); border-color: var(--deep); color: white; }
+    .metric dt { color: var(--muted); font-size: .85rem; font-weight: 650; }
     .metric:first-child dt { color: #d3ebe2; }
 
     .metric dd {
-      margin: .25rem 0 0;
-      font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+      margin: .2rem 0 0;
+      font-size: clamp(1.12rem, 2.4vw, 1.85rem);
+      font-weight: 750;
+      letter-spacing: -.035em;
       font-variant-numeric: tabular-nums;
-      font-weight: 770;
-      letter-spacing: -.04em;
       overflow-wrap: anywhere;
     }
 
-    .overview { display: grid; gap: 1rem; min-width: 0; }
     figure { margin: 0; }
-    #allocation-insight { margin: .45rem 0 .85rem; color: var(--teal); font-weight: 650; }
-    .allocation { display: grid; align-items: center; gap: .85rem; min-width: 0; }
+    #allocation-insight { margin-bottom: .8rem; color: var(--teal); font-weight: 650; }
+    .allocation { display: grid; align-items: center; gap: 1rem; }
 
     .ring {
       display: grid;
       place-items: center;
-      width: min(10rem, 100%);
+      width: min(9rem, 100%);
       aspect-ratio: 1;
-      margin: auto;
       border-radius: 50%;
+      margin: auto;
     }
 
     .ring::after {
       content: "";
-      width: 66%;
+      width: 65%;
       aspect-ratio: 1;
       border-radius: 50%;
       background: var(--paper);
     }
 
     .legend { list-style: none; padding: 0; margin: 0; }
+
     .legend li {
       display: grid;
       grid-template-columns: auto minmax(0, 1fr) auto;
@@ -241,35 +211,33 @@
       gap: .45rem;
       padding: .4rem 0;
       border-bottom: 1px solid var(--line);
-      font-size: .86rem;
+      font-size: .875rem;
       overflow-wrap: anywhere;
     }
 
-    .legend strong { font-variant-numeric: tabular-nums; }
     .swatch { width: .65rem; height: .65rem; border-radius: 50%; }
     .scroll { max-width: 100%; overflow-x: auto; overscroll-behavior-inline: contain; margin-top: .7rem; }
     table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-    th, td { padding: .56rem .6rem; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
-    th { background: var(--soft); color: var(--muted); font-size: .78rem; font-weight: 700; }
+    th, td { padding: .55rem .6rem; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+    th { background: var(--soft); color: var(--muted); font-size: .8rem; }
     td { font-size: .875rem; }
     .number { text-align: right; }
+    .filters { margin-top: .8rem; }
 
-    .trade-label {
+    .tag {
       display: inline-block;
-      padding: .12rem .45rem;
+      padding: .15rem .45rem;
       border-radius: .35rem;
       background: #e1eee8;
       color: #164d41;
-      font-size: .76rem;
-      font-weight: 750;
+      font-size: .8rem;
+      font-weight: 700;
     }
 
-    .trade-label.sell { background: #f4e9df; color: #773c20; }
-    .trade-delete { min-height: 2.25rem; padding: .25rem .55rem; }
-    .filters { margin-top: .75rem; }
+    .tag.sell { background: #f4e9df; color: #773c20; }
 
     @media (min-width: 40rem) {
-      .allocation { grid-template-columns: minmax(0, 8rem) minmax(0, 1fr); }
+      .allocation { grid-template-columns: 8rem minmax(0, 1fr); }
     }
 
     @media (min-width: 57rem) {
@@ -279,27 +247,22 @@
 
     @media (min-width: 80rem) {
       .overview { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); align-items: start; }
-      .overview .allocation { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 34rem) {
       #workspace, #details, .overview { gap: .75rem; }
       .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .metric:first-child { grid-column: 1 / -1; }
-      .metric { padding: .75rem; }
     }
   </style>
 </head>
 
 <body>
-  <header class="topbar">
-    <div class="shell topbar-inner">
+  <header>
+    <div class="shell row">
       <div class="brand">
-        <span class="brand-mark" aria-hidden="true">F</span>
-        <div>
-          <div class="brand-name">FinTrack</div>
-          <div class="brand-credit">by Finnet Technologies</div>
-        </div>
+        <span class="mark" aria-hidden="true">F</span>
+        <div><strong>FinTrack</strong><small>by Finnet Technologies</small></div>
       </div>
       <button id="sign-out" class="secondary" type="button" hidden>Sign out</button>
     </div>
@@ -312,8 +275,8 @@
       <h1 id="auth-title">Sign in</h1>
       <form id="auth-form">
         <label>Username
-          <input name="username" autocomplete="username" required minlength="3"
-                 maxlength="50" pattern="[a-zA-Z0-9_]+"
+          <input name="username" autocomplete="username" required
+                 minlength="3" maxlength="50" pattern="[a-zA-Z0-9_]+"
                  title="Use letters, numbers, or underscores.">
         </label>
         <label>Password
@@ -327,11 +290,10 @@
 
     <div id="workspace" hidden>
       <section class="panel sidebar" aria-labelledby="portfolios-title">
-        <div class="section-head">
+        <div class="row">
           <h2 id="portfolios-title">Portfolios</h2>
           <button id="new-portfolio" type="button">New portfolio</button>
         </div>
-
         <ul id="portfolio-list"></ul>
         <p id="portfolio-empty" class="muted" hidden>Create a portfolio to start tracking trades.</p>
 
@@ -342,7 +304,7 @@
           <label>Base currency
             <select name="base_currency"><option>KES</option><option>USD</option></select>
           </label>
-          <p id="currency-note" class="muted" hidden>Currency is fixed while this portfolio has trades.</p>
+          <p id="currency-note" class="muted small" hidden>Currency is fixed while this portfolio has trades.</p>
           <div class="actions">
             <button type="submit">Save portfolio</button>
             <button id="cancel-portfolio" class="secondary" type="button">Cancel</button>
@@ -351,16 +313,14 @@
       </section>
 
       <section id="details" aria-labelledby="portfolio-title" hidden>
-        <div class="panel">
-          <div class="section-head">
-            <div>
-              <h1 id="portfolio-title" tabindex="-1"></h1>
-              <p id="portfolio-client" class="muted"></p>
-            </div>
-            <div class="actions">
-              <button id="edit-portfolio" class="secondary" type="button">Edit portfolio</button>
-              <button id="delete-portfolio" class="secondary danger" type="button">Delete portfolio</button>
-            </div>
+        <div class="panel row">
+          <div>
+            <h1 id="portfolio-title" tabindex="-1"></h1>
+            <p id="portfolio-client" class="muted"></p>
+          </div>
+          <div class="actions">
+            <button id="edit-portfolio" class="secondary" type="button">Edit portfolio</button>
+            <button id="delete-portfolio" class="secondary danger" type="button">Delete portfolio</button>
           </div>
         </div>
 
@@ -382,7 +342,7 @@
 
           <section class="panel" aria-labelledby="holdings-title">
             <h2 id="holdings-title">Current holdings</h2>
-            <p class="description muted">Estimated value uses the latest recorded trade price for each instrument.</p>
+            <p class="muted small">Estimated value uses each instrument’s latest recorded trade price.</p>
             <p id="holdings-empty" class="muted" hidden>No current holdings.</p>
             <div id="holdings-scroll" class="scroll" tabindex="0" role="region" aria-label="Holdings table">
               <table>
@@ -402,27 +362,17 @@
         </div>
 
         <section class="panel" aria-labelledby="trades-title">
-          <div class="section-head">
+          <div class="row">
             <h2 id="trades-title">Transaction history</h2>
-            <button id="toggle-trade" type="button" aria-expanded="false" aria-controls="trade-form">
-              Record a trade
-            </button>
+            <button id="toggle-trade" type="button" aria-expanded="false" aria-controls="trade-form">Record a trade</button>
           </div>
 
           <form id="trade-form" hidden>
             <div class="fields">
-              <label>Instrument
-                <input name="instrument" placeholder="e.g. SCOM" required maxlength="30">
-              </label>
-              <label>Type
-                <select name="type"><option>BUY</option><option>SELL</option></select>
-              </label>
-              <label>Quantity
-                <input name="quantity" type="number" min="0.000001" step="0.000001" required>
-              </label>
-              <label>Unit price
-                <input name="unit_price" type="number" min="0.000001" step="0.000001" required>
-              </label>
+              <label>Instrument <input name="instrument" placeholder="e.g. SCOM" required maxlength="30"></label>
+              <label>Type <select name="type"><option>BUY</option><option>SELL</option></select></label>
+              <label>Quantity <input name="quantity" type="number" min="0.000001" step="0.000001" required></label>
+              <label>Unit price <input name="unit_price" type="number" min="0.000001" step="0.000001" required></label>
               <label>Trade date <input name="trade_date" type="date" required></label>
             </div>
             <div class="actions">
@@ -432,13 +382,9 @@
           </form>
 
           <div class="fields filters">
-            <label>Instrument
-              <input id="trade-search" type="search" placeholder="Search instruments">
-            </label>
+            <label>Filter by instrument <input id="trade-search" type="search" placeholder="e.g. SCOM"></label>
             <label>Trade type
-              <select id="trade-filter">
-                <option value="">All types</option><option>BUY</option><option>SELL</option>
-              </select>
+              <select id="trade-filter"><option value="">All types</option><option>BUY</option><option>SELL</option></select>
             </label>
             <label>Sort by
               <select id="trade-sort">
@@ -454,11 +400,8 @@
             <table>
               <thead>
                 <tr>
-                  <th scope="col">Date</th>
-                  <th scope="col">Instrument</th>
-                  <th scope="col">Type</th>
-                  <th scope="col" class="number">Units</th>
-                  <th scope="col" class="number">Unit price</th>
+                  <th scope="col">Date</th><th scope="col">Instrument</th><th scope="col">Type</th>
+                  <th scope="col" class="number">Units</th><th scope="col" class="number">Unit price</th>
                   <th scope="col">Action</th>
                 </tr>
               </thead>
@@ -476,26 +419,25 @@
     const portfolioForm = byId("portfolio-form");
     const tradeForm = byId("trade-form");
     const portfolioFields = portfolioForm.elements;
-    const chartColors = ["#16766a", "#477ba8", "#b47929", "#875789", "#69824c", "#a65254"];
+    const colors = ["#16766a", "#477ba8", "#b47929", "#875789", "#69824c", "#a65254"];
     const percent = new Intl.NumberFormat("en-KE", {
       style: "percent",
       maximumFractionDigits: 1,
     });
 
     let token = "";
-    let registering = false;
     let busy = false;
-    let activePortfolio = null;
+    let registering = false;
     let editingId = null;
+    let activePortfolio = null;
     let trades = [];
 
-    function showStatus(message, isError = false) {
-      const status = byId("status");
-      status.textContent = message;
-      status.dataset.error = String(isError);
+    function message(text, isError = false) {
+      byId("status").textContent = text;
+      byId("status").dataset.error = String(isError);
     }
 
-    function setAuthMode(createAccount) {
+    function authMode(createAccount) {
       registering = createAccount;
       const title = registering ? "Create an account" : "Sign in";
       byId("auth-title").textContent = title;
@@ -505,13 +447,13 @@
       authForm.elements.password.value = "";
     }
 
-    function setTradeForm(open) {
+    function showTradeForm(open) {
       tradeForm.hidden = !open;
       byId("toggle-trade").setAttribute("aria-expanded", String(open));
       if (open) tradeForm.elements.instrument.focus();
     }
 
-    function endSession() {
+    function signOut() {
       token = "";
       activePortfolio = null;
       editingId = null;
@@ -520,31 +462,34 @@
       byId("details").hidden = true;
       byId("sign-out").hidden = true;
       byId("portfolio-list").replaceChildren();
-      portfolioForm.reset();
+      byId("holdings-rows").replaceChildren();
+      byId("trade-rows").replaceChildren();
+      byId("allocation-legend").replaceChildren();
       portfolioForm.hidden = true;
+      portfolioForm.reset();
       tradeForm.reset();
-      setTradeForm(false);
+      showTradeForm(false);
       authForm.reset();
-      setAuthMode(false);
+      authMode(false);
       byId("auth").hidden = false;
       authForm.elements.username.focus();
     }
 
-    async function api(path, { method = "GET", body } = {}) {
+    async function api(path, method = "GET", body) {
       const headers = {};
       const requestToken = token;
-      if (requestToken) headers.Authorization = `Bearer ${requestToken}`;
+      if (requestToken) headers.Authorization = "Bearer " + requestToken;
       if (body !== undefined) headers["Content-Type"] = "application/json";
 
       let response;
       try {
-        response = await fetch(`/api${path}`, {
+        response = await fetch("/api" + path, {
           method,
           headers,
           body: body === undefined ? undefined : JSON.stringify(body),
         });
       } catch {
-        throw new Error("Could not reach FinTrack. Check your connection and try again.");
+        throw new Error("Could not reach FinTrack. Try again.");
       }
 
       if (response.status === 204) return;
@@ -552,70 +497,74 @@
       if (response.ok && data !== null) return data;
 
       if (response.status === 401 && requestToken) {
-        if (token === requestToken) endSession();
+        if (token === requestToken) signOut();
         throw new Error("Your session ended. Sign in again.");
       }
       if (typeof data?.detail === "string") throw new Error(data.detail);
-      if (Array.isArray(data?.detail)) {
-        throw new Error("Check the values you entered and try again.");
-      }
-      throw new Error(`FinTrack could not complete the request (${response.status}).`);
+      if (Array.isArray(data?.detail)) throw new Error("Check the values you entered and try again.");
+      throw new Error("FinTrack could not complete the request (" + response.status + ").");
     }
 
-    async function run(message, action) {
+    async function run(loading, action) {
       if (busy) return;
       busy = true;
       const buttons = [...document.querySelectorAll("button:not(:disabled)")];
       for (const button of buttons) button.disabled = true;
-      showStatus(message);
+      message(loading);
 
-      let focusTarget;
+      let focus;
       try {
         const result = await action();
-        showStatus(result?.message ?? "");
-        focusTarget = result?.focus;
+        message(result?.message ?? "");
+        focus = result?.focus;
       } catch (error) {
-        showStatus(error.message, true);
+        message(error.message, true);
       } finally {
         for (const button of buttons) button.disabled = false;
         busy = false;
-        focusTarget?.focus();
+        focus?.focus();
       }
     }
 
-    function formValues(form) {
+    function values(form) {
       return Object.fromEntries(new FormData(form));
     }
 
-    function money(amount, currency) {
+    function money(value, currency) {
       return new Intl.NumberFormat("en-KE", {
         style: "currency",
         currency,
         currencyDisplay: "code",
-      }).format(Number(amount));
+      }).format(Number(value));
     }
 
-    function makeButton(label, action) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "secondary";
-      button.textContent = label;
-      button.addEventListener("click", action);
-      return button;
+    function element(tag, text, className) {
+      const node = document.createElement(tag);
+      if (text !== undefined) node.textContent = text;
+      if (className) node.className = className;
+      return node;
     }
 
-    function addCell(row, value, numeric = false) {
+    function button(text, className, action) {
+      const node = element("button", text, className);
+      node.type = "button";
+      node.addEventListener("click", action);
+      return node;
+    }
+
+    function addCell(row, text, numeric = false) {
       const cell = row.insertCell();
-      cell.textContent = value;
+      cell.textContent = text;
       if (numeric) cell.className = "number";
-      return cell;
     }
 
-    function highlightPortfolio() {
-      for (const button of byId("portfolio-list").querySelectorAll("button")) {
-        const selected = Number(button.dataset.portfolioId) === activePortfolio?.id;
-        if (selected) button.setAttribute("aria-current", "true");
-        else button.removeAttribute("aria-current");
+    function selectPortfolioButton() {
+      for (const item of byId("portfolio-list").querySelectorAll("button")) {
+        if (Number(item.dataset.id) === activePortfolio?.id) {
+          item.setAttribute("aria-current", "true");
+        } else {
+          item.removeAttribute("aria-current");
+        }
       }
     }
 
@@ -625,33 +574,27 @@
       list.replaceChildren();
 
       for (const portfolio of portfolios) {
-        const item = document.createElement("li");
-        const button = makeButton("", () => run("Loading portfolio…", async () => {
-          await loadPortfolio(portfolio.id);
-          return { focus: byId("portfolio-title") };
-        }));
+        const open = button("", "secondary portfolio-button", () =>
+          run("Loading portfolio…", async () => {
+            await loadPortfolio(portfolio.id);
+            return { focus: byId("portfolio-title") };
+          })
+        );
 
-        button.classList.add("portfolio-button");
-        button.dataset.portfolioId = portfolio.id;
+        open.dataset.id = portfolio.id;
+        open.append(
+          element("span", portfolio.name),
+          element("span", portfolio.base_currency, "currency"),
+          element("span", portfolio.client_name, "client")
+        );
 
-        const name = document.createElement("span");
-        name.textContent = portfolio.name;
-
-        const currency = document.createElement("span");
-        currency.className = "currency";
-        currency.textContent = portfolio.base_currency;
-
-        const client = document.createElement("span");
-        client.className = "portfolio-client";
-        client.textContent = portfolio.client_name;
-
-        button.append(name, currency, client);
-        item.append(button);
+        const item = element("li");
+        item.append(open);
         list.append(item);
       }
 
       byId("portfolio-empty").hidden = portfolios.length > 0;
-      highlightPortfolio();
+      selectPortfolioButton();
       return portfolios;
     }
 
@@ -678,11 +621,11 @@
         (a, b) => Number(b.total_value) - Number(a.total_value)
       );
       const format = (amount) => money(amount, summary.base_currency);
-      const value = holdings.reduce((sum, row) => sum + Number(row.total_value), 0);
-      const cost = holdings.reduce((sum, row) => sum + Number(row.total_invested), 0);
+      const totalValue = holdings.reduce((sum, row) => sum + Number(row.total_value), 0);
+      const totalCost = holdings.reduce((sum, row) => sum + Number(row.total_invested), 0);
 
-      byId("metric-value").textContent = format(value);
-      byId("metric-cost").textContent = format(cost);
+      byId("metric-value").textContent = format(totalValue);
+      byId("metric-cost").textContent = format(totalCost);
       byId("metric-count").textContent = holdings.length;
       byId("holdings-empty").hidden = holdings.length > 0;
       byId("holdings-scroll").hidden = holdings.length === 0;
@@ -699,42 +642,39 @@
       }
 
       const chart = byId("chart");
-      const legend = byId("allocation-legend");
       const ring = byId("allocation-ring");
+      const legend = byId("allocation-legend");
       legend.replaceChildren();
       ring.style.background = "";
-      chart.hidden = value <= 0;
+      chart.hidden = totalValue <= 0;
       if (chart.hidden) return;
 
-      const share = (holding) => Number(holding.total_value) / value;
+      const share = (holding) => Number(holding.total_value) / totalValue;
       const largest = holdings[0];
       byId("allocation-insight").textContent =
-        \`\${largest.instrument} accounts for \${percent.format(share(largest))} of estimated value.\`;
+        largest.instrument + " accounts for " + percent.format(share(largest)) + " of estimated value.";
 
       let start = 0;
-      const slices = [];
-      holdings.forEach((holding, index) => {
-        const color = chartColors[index % chartColors.length];
+      const slices = holdings.map((holding, index) => {
+        const color = colors[index % colors.length];
         const end = index === holdings.length - 1 ? 100 : start + 100 * share(holding);
-        slices.push(\`\${color} \${start}% \${end}%\`);
+        const slice = color + " " + start + "% " + end + "%";
         start = end;
 
-        const item = document.createElement("li");
-        const swatch = document.createElement("span");
-        swatch.className = "swatch";
+        const swatch = element("span", undefined, "swatch");
         swatch.style.backgroundColor = color;
         swatch.setAttribute("aria-hidden", "true");
-
-        const label = document.createElement("span");
-        label.textContent = \`\${holding.instrument} · \${format(holding.total_value)}\`;
-
-        const percentage = document.createElement("strong");
-        percentage.textContent = percent.format(share(holding));
-        item.append(swatch, label, percentage);
+        const item = element("li");
+        item.append(
+          swatch,
+          element("span", holding.instrument + " · " + format(holding.total_value)),
+          element("strong", percent.format(share(holding)))
+        );
         legend.append(item);
+        return slice;
       });
 
-      ring.style.background = \`conic-gradient(\${slices.join(", ")})\`;
+      ring.style.background = "conic-gradient(" + slices.join(", ") + ")";
     }
 
     function renderTrades() {
@@ -755,52 +695,44 @@
 
       const rows = byId("trade-rows");
       rows.replaceChildren();
-
       for (const trade of visible) {
         const row = rows.insertRow();
         addCell(row, trade.trade_date);
         addCell(row, trade.instrument);
-
-        const tag = document.createElement("span");
-        tag.className = trade.type === "SELL" ? "trade-label sell" : "trade-label";
-        tag.textContent = trade.type;
-        row.insertCell().append(tag);
-
+        row.insertCell().append(element("span", trade.type, trade.type === "SELL" ? "tag sell" : "tag"));
         addCell(row, trade.quantity, true);
         addCell(row, money(trade.unit_price, activePortfolio.base_currency), true);
 
-        const remove = makeButton("Delete", () => {
-          if (busy || !confirm(\`Delete the \${trade.type} of \${trade.quantity} \${trade.instrument}?\`)) return;
+        const remove = button("Delete", "secondary danger", () => {
+          if (busy || !confirm("Delete this " + trade.type + " of " + trade.instrument + "?")) return;
           const portfolioId = activePortfolio.id;
           run("Deleting trade…", async () => {
-            await api(\`/transactions/\${trade.id}\`, { method: "DELETE" });
+            await api("/transactions/" + trade.id, "DELETE");
             await loadPortfolio(portfolioId);
             return { message: "Trade deleted.", focus: byId("toggle-trade") };
           });
         });
 
-        remove.classList.add("danger", "trade-delete");
-        remove.setAttribute("aria-label", \`Delete \${trade.instrument} \${trade.type} trade \${trade.id}\`);
+        remove.setAttribute("aria-label", "Delete " + trade.instrument + " trade " + trade.id);
         row.insertCell().append(remove);
       }
 
       byId("trades-scroll").hidden = visible.length === 0;
-      const empty = byId("trades-empty");
-      empty.hidden = visible.length > 0;
-      empty.textContent = trades.length ? "No trades match these filters." : "No transactions yet.";
+      byId("trades-empty").hidden = visible.length > 0;
+      byId("trades-empty").textContent = trades.length ? "No trades match these filters." : "No transactions yet.";
     }
 
     async function loadPortfolio(id) {
-      const path = \`/portfolios/\${id}\`;
+      const path = "/portfolios/" + id;
       const [portfolio, summary, transactions] = await Promise.all([
         api(path),
-        api(\`\${path}/summary\`),
-        api(\`\${path}/transactions\`),
+        api(path + "/summary"),
+        api(path + "/transactions"),
       ]);
 
       if (activePortfolio?.id !== id) {
         tradeForm.reset();
-        setTradeForm(false);
+        showTradeForm(false);
         byId("trade-search").value = "";
         byId("trade-filter").value = "";
         byId("trade-sort").value = "newest";
@@ -810,44 +742,48 @@
       trades = transactions;
       portfolioForm.hidden = true;
       byId("portfolio-title").textContent = portfolio.name;
-      byId("portfolio-client").textContent =
-        \`\${portfolio.client_name} · \${portfolio.base_currency}\`;
+      byId("portfolio-client").textContent = portfolio.client_name + " · " + portfolio.base_currency;
       renderHoldings(summary);
       renderTrades();
-      highlightPortfolio();
+      selectPortfolioButton();
       byId("details").hidden = false;
     }
 
+    byId("auth-toggle").addEventListener("click", () => {
+      authMode(!registering);
+      message("");
+      authForm.elements.username.focus();
+    });
+
     authForm.addEventListener("submit", (event) => {
       event.preventDefault();
-      const credentials = formValues(authForm);
+      const credentials = values(authForm);
       credentials.username = credentials.username.trim();
 
       run(registering ? "Creating account…" : "Signing in…", async () => {
         if (registering) {
-          await api("/auth/register", { method: "POST", body: credentials });
-          setAuthMode(false);
+          await api("/auth/register", "POST", credentials);
+          authMode(false);
           return {
             message: "Account created. Enter your password to sign in.",
             focus: authForm.elements.password,
           };
         }
 
-        const login = await api("/auth/login", { method: "POST", body: credentials });
+        const login = await api("/auth/login", "POST", credentials);
         token = login.access_token;
-
         let portfolios;
         try {
           portfolios = await loadPortfolios();
         } catch (error) {
-          endSession();
+          signOut();
           throw error;
         }
 
         authForm.reset();
         byId("auth").hidden = true;
-        byId("sign-out").hidden = false;
         byId("workspace").hidden = false;
+        byId("sign-out").hidden = false;
 
         if (credentials.username === "demo_analyst" && portfolios.length) {
           const featured = portfolios.find((portfolio) =>
@@ -861,16 +797,10 @@
       });
     });
 
-    byId("auth-toggle").addEventListener("click", () => {
-      setAuthMode(!registering);
-      showStatus("");
-      authForm.elements.username.focus();
-    });
-
     byId("sign-out").addEventListener("click", () => {
       if (busy) return;
-      endSession();
-      showStatus("Signed out.");
+      signOut();
+      message("Signed out.");
     });
 
     byId("new-portfolio").addEventListener("click", () => openPortfolioForm(null));
@@ -883,22 +813,22 @@
 
     portfolioForm.addEventListener("submit", (event) => {
       event.preventDefault();
-      const body = formValues(portfolioForm);
+      const body = values(portfolioForm);
       body.name = body.name.trim();
       body.client_name = body.client_name.trim();
       body.base_currency = portfolioFields.base_currency.value;
-
       if (!body.name || !body.client_name) {
-        showStatus("Enter a portfolio name and a client name.", true);
+        message("Enter a portfolio name and a client name.", true);
         return;
       }
 
       const id = editingId;
       run("Saving portfolio…", async () => {
-        const saved = await api(id === null ? "/portfolios" : \`/portfolios/\${id}\`, {
-          method: id === null ? "POST" : "PUT",
-          body,
-        });
+        const saved = await api(
+          id === null ? "/portfolios" : "/portfolios/" + id,
+          id === null ? "POST" : "PUT",
+          body
+        );
         portfolioForm.hidden = true;
         await loadPortfolios();
         await loadPortfolio(saved.id);
@@ -907,45 +837,44 @@
     });
 
     byId("delete-portfolio").addEventListener("click", () => {
-      if (!activePortfolio || busy) return;
-      const { id, name } = activePortfolio;
-      if (!confirm(\`Delete \${name} and all its trades?\`)) return;
+      if (busy || !activePortfolio) return;
+      const portfolio = activePortfolio;
+      if (!confirm("Delete " + portfolio.name + " and all its trades?")) return;
 
       run("Deleting portfolio…", async () => {
-        await api(\`/portfolios/\${id}\`, { method: "DELETE" });
+        await api("/portfolios/" + portfolio.id, "DELETE");
         activePortfolio = null;
         trades = [];
         byId("details").hidden = true;
         portfolioForm.hidden = true;
         tradeForm.reset();
-        setTradeForm(false);
+        showTradeForm(false);
         await loadPortfolios();
         return { message: "Portfolio deleted.", focus: byId("new-portfolio") };
       });
     });
 
-    byId("toggle-trade").addEventListener("click", () => setTradeForm(tradeForm.hidden));
+    byId("toggle-trade").addEventListener("click", () => showTradeForm(tradeForm.hidden));
     byId("cancel-trade").addEventListener("click", () => {
-      setTradeForm(false);
+      showTradeForm(false);
       byId("toggle-trade").focus();
     });
 
     tradeForm.addEventListener("submit", (event) => {
       event.preventDefault();
       if (!activePortfolio) return;
-
-      const body = formValues(tradeForm);
+      const body = values(tradeForm);
       body.instrument = body.instrument.trim().toUpperCase();
       if (!body.instrument) {
-        showStatus("Enter an instrument, such as SCOM.", true);
+        message("Enter an instrument, such as SCOM.", true);
         return;
       }
 
       const id = activePortfolio.id;
       run("Recording trade…", async () => {
-        await api(\`/portfolios/\${id}/transactions\`, { method: "POST", body });
+        await api("/portfolios/" + id + "/transactions", "POST", body);
         tradeForm.reset();
-        setTradeForm(false);
+        showTradeForm(false);
         await loadPortfolio(id);
         return { message: "Trade recorded.", focus: byId("toggle-trade") };
       });
