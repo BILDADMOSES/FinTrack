@@ -1,6 +1,6 @@
 # FinTrack
 
-FinTrack is a portfolio and transaction tracker built for the Finnet Technologies technical assessment. An analyst can create client portfolios, record buys and sells, and see current holdings, their estimated value, and how that value is distributed across instruments.
+FinTrack is a portfolio and transaction tracker built for the Finnet Technologies. An analyst can create client portfolios, record buys and sells, and see current holdings, their estimated value, and how that value is distributed across instruments.
 
 ## Live demo
 
